@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Telegram Bot</title>
+    <style>
+        body { text-align: center; font-family: Arial; padding: 50px; }
+        h2 { color: #0088cc; }
+        #countdown { font-size: 2em; margin: 20px 0; }
+        a { color: #0088cc; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h2>Your file is ready!</h2>
+    <p>Opening Telegram in <span id="countdown">3</span> seconds...</p>
+    <p>If nothing happens, <a id="manual-link" href="#">click here</a>.</p>
+
+    <script>
+        const botUsername = "Myallin1file_bot"; // <-- Replace this with your bot username
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileCode = urlParams.get('file') || "default";
+
+        const webLink = `https://t.me/${botUsername}?start=${fileCode}`;
+        const appLink = `tg://resolve?domain=${botUsername}&start=${fileCode}`;
+
+        document.getElementById("manual-link").href = webLink;
+
+        let countdown = 3;
+        const countdownEl = document.getElementById("countdown");
+        const timer = setInterval(() => {
+            countdown--;
+            countdownEl.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timer);
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
+                    window.location.href = appLink;
+                } else {
+                    window.location.href = webLink;
+                }
+                setTimeout(() => { window.location.href = webLink; }, 2000);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
